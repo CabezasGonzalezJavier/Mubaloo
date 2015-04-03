@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fragment_vertical_margin">28dp</dimen>
+    <dimen name="fragment_horizontal_margin">28dp</dimen>
+    <dimen name="fragment_vertical_small_margin">5dp</dimen>
+</resources>
