@@ -1,6 +1,5 @@
 package com.thedeveloperworldisyours.mubalooorganisation.dummy;
 
-import com.thedeveloperworldisyours.mubalooorganisation.interfaces.Item;
 import com.thedeveloperworldisyours.mubalooorganisation.models.DummyItem;
 
 import java.util.ArrayList;

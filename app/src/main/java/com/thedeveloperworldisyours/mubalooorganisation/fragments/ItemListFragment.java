@@ -15,10 +15,8 @@ import com.google.gson.reflect.TypeToken;
 import com.thedeveloperworldisyours.mubalooorganisation.R;
 import com.thedeveloperworldisyours.mubalooorganisation.adapters.EntryAdapter;
 import com.thedeveloperworldisyours.mubalooorganisation.dummy.DummyContent;
-import com.thedeveloperworldisyours.mubalooorganisation.interfaces.Item;
 import com.thedeveloperworldisyours.mubalooorganisation.models.DummyItem;
 import com.thedeveloperworldisyours.mubalooorganisation.models.Team;
-import com.thedeveloperworldisyours.mubalooorganisation.models.SectionItem;
 import com.thedeveloperworldisyours.mubalooorganisation.utils.Utils;
 import com.thedeveloperworldisyours.mubalooorganisation.webservices.Client;
 
@@ -44,11 +42,6 @@ import retrofit.client.Response;
  * interface.
  */
 public class ItemListFragment extends ListFragment {
-
-    /**
-     * ArrayList for show list with teams and member
-     */
-    ArrayList<Item> mItems = new ArrayList<Item>();
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -126,28 +119,29 @@ public class ItemListFragment extends ListFragment {
      * Build the list for DummyContent and for show list in screen
      */
     public void buildListDummy(List<Team> organisation) {
-
-        mItems.clear();
+        int iterator =0;
         DummyContent.removeItem();
         for (int i=0;i<organisation.size();i++){
 
             if (organisation.get(i).getFirstName()!=null) {
 
-                mItems.add(new SectionItem(organisation.get(i).getRole()));
-                DummyItem dummyItem = new DummyItem(organisation.get(i).getId(), buildName(organisation.get(i).getFirstName(),organisation.get(i).getLastName()),organisation.get(i).getProfileImageURL(),organisation.get(i).getRole());
-                mItems.add(dummyItem);
+                DummyContent.addItem(new DummyItem(Integer.toString(iterator),organisation.get(i).getRole(),"","",true));
+                iterator++;
+                DummyItem dummyItem = new DummyItem(Integer.toString(iterator), buildName(organisation.get(i).getFirstName(),organisation.get(i).getLastName()),organisation.get(i).getProfileImageURL(),organisation.get(i).getRole(),false);
+                iterator++;
                 DummyContent.addItem(dummyItem);
             }else{
-                mItems.add(new SectionItem(organisation.get(i).getTeamName()));
+                DummyContent.addItem(new DummyItem(Integer.toString(iterator),organisation.get(i).getTeamName(),"","",true));
+                iterator++;
             }
             for (int j = 0; j < organisation.get(i).getMembers().size(); j++) {
-                DummyItem dummyItem = new DummyItem(organisation.get(i).getId(), buildName(organisation.get(i).getMembers().get(j).getFirstName(),organisation.get(i).getMembers().get(j).getLastName()),organisation.get(i).getMembers().get(j).getProfileImageURL(),organisation.get(i).getMembers().get(j).getRole());
-                mItems.add(dummyItem);
+                DummyItem dummyItem = new DummyItem(Integer.toString(iterator), buildName(organisation.get(i).getMembers().get(j).getFirstName(),organisation.get(i).getMembers().get(j).getLastName()),organisation.get(i).getMembers().get(j).getProfileImageURL(),organisation.get(i).getMembers().get(j).getRole(),false);
+                iterator++;
                 DummyContent.addItem(dummyItem);
             }
         }
 
-        setListAdapter(new EntryAdapter(getActivity(),mItems));
+        setListAdapter(new EntryAdapter(getActivity(),DummyContent.ITEM_MAP));
 
 
     }
@@ -223,7 +217,7 @@ public class ItemListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        if(!mItems.get(position).isSection()){
+        if(!DummyContent.ITEMS.get(position).isSection()){
             mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
         }
 

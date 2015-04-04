@@ -5,51 +5,66 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.thedeveloperworldisyours.mubalooorganisation.R;
-import com.thedeveloperworldisyours.mubalooorganisation.interfaces.Item;
 import com.thedeveloperworldisyours.mubalooorganisation.models.DummyItem;
-import com.thedeveloperworldisyours.mubalooorganisation.models.SectionItem;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by javiergonzalezcabezas on 3/4/15.
  */
-public class EntryAdapter extends ArrayAdapter<Item> {
-        private ArrayList mItems;
+public class EntryAdapter extends BaseAdapter {
+    private Map<String, DummyItem> mItems;
     private Context mContext;
-        private LayoutInflater vi;
+    private LayoutInflater vi;
 
 
 
-    public EntryAdapter(Context context, ArrayList items) {
-        super(context,0, items);
+    public EntryAdapter(Context context, Map<String, DummyItem> items) {
         this.mItems = items;
         this.mContext=context;
         vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
+    public int getCount() {
+        return mItems.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return mItems.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+
+
+    @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View v = convertView;
-            final Item i = (Item) mItems.get(position);
+            final DummyItem dummyItem = (DummyItem) mItems.get(Integer.toString(position));
 
-            if (i != null) {
-                if(i.isSection()){
-                    SectionItem si = (SectionItem)i;
+            if (dummyItem != null) {
+                if(dummyItem.isSection()){
+
                     v = vi.inflate(R.layout.fragment_setion_list, null);
                     v.setOnClickListener(null);
                     v.setOnLongClickListener(null);
                     v.setLongClickable(false);
                     final TextView sectionView =
                             (TextView) v.findViewById(R.id.list_item_section_text);
-                    sectionView.setText(si.getTitle());
+                    sectionView.setText(dummyItem.getName());
                 } else {
-                    DummyItem dummyItem = (DummyItem)i;
                     v = vi.inflate(R.layout.fragment_item_list, null);
                     final TextView name =
                             (TextView)v.findViewById(R.id.fragment_item_detail_name_textView);
